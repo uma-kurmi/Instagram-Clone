@@ -43,18 +43,18 @@ Instagram-Clone
 ├── requirements.txt
 
 ├── static
-    ├── styles.css
-    └── firebase-login.js
+styles.css
+firebase-login.js
 
 ├── templates
-│   ├── main.html
-│   ├── timeline.html
-│   ├── profile.html
-│   ├── search.html
-│   ├── add_post.html
-│   ├── followers.html
-│   ├── following.html
-│   └── single_post.html
+main.html
+timeline.html
+profile.html
+search.html
+add_post.html
+followers.html
+following.html
+single_post.html
 
 # How the Application Works
 A user logs in using Firebase Google Authentication.
