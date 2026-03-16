@@ -10,7 +10,7 @@ View a global timeline of posts
 View individual user profiles
 Follow and unfollow users
 View followers and following lists
-Search for other users
+Search for other users.
 Image storage using Google Cloud Storage
 
 # Tech Stack
