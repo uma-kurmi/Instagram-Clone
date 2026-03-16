@@ -48,7 +48,27 @@ Google Firestore
 Google Cloud Storage
 
 # Project Structure
+
 Instagram-Clone
+│
+├── main.py                 # FastAPI application entry point
+├── local_constants.py      # Firebase configuration and project constants
+├── requirements.txt        # Python dependencies
+│
+├── static/                 # Static frontend assets
+│   ├── styles.css          # Application styling
+│   └── firebase-login.js   # Firebase authentication logic
+│
+├── templates/              # Jinja2 HTML templates for UI rendering
+│   ├── main.html           # Main landing page
+│   ├── timeline.html       # User timeline / feed
+│   ├── profile.html        # User profile page
+│   ├── search.html         # User search page
+│   ├── add_post.html       # Create new post page
+│   ├── followers.html      # Followers list
+│   ├── following.html      # Following list
+│   └── single_post.html    # Individual post view
+
 
 main.py
 
