@@ -4,11 +4,17 @@ The application allows users to log in using Google, create posts with images, f
 
 # Features
 The application supports the following functionality:
+
 User authentication with Firebase Google Login
+
 Upload posts with images
+
 View a global timeline of posts
+
 View individual user profiles
+
 Follow and unfollow users
+
 View followers and following lists
 Search for other users.
 Image storage using Google Cloud Storage
