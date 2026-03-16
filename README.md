@@ -69,28 +69,6 @@ Instagram-Clone
 │   ├── following.html      # Following list
 │   └── single_post.html    # Individual post view
 
-
-main.py
-
-local_constants.py
-
-requirements.txt
-
-static
-
--styles.css
--firebase-login.js
-
-## templates
-main.html
-timeline.html
-profile.html
-search.html
-add_post.html
-followers.html
-following.html
-single_post.html
-
 # How the Application Works
 A user logs in using Firebase Google Authentication.
 After authentication, a secure token is stored in cookies.
