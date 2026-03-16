@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Post</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="container">
+    <h2>Create a New Post</h2>
+    <form action="/create_post" method="post" enctype="multipart/form-data">
+        <label for="image">Choose Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required><br><br>
+        <label for="caption">Caption:</label>
+        <textarea id="caption" name="caption" placeholder="Write a caption..." required></textarea><br><br>
+        <button type="submit">Post</button>
+    </form>
+    <br/>
+    <div style="text-align: right;">
+        <a href="/">Back to Timeline</a>
+    </div>
+</div>
+</body>
+</html>

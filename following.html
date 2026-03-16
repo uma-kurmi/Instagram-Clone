@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Following</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="container">
+    <h2>Following</h2>
+    <ul>
+    {% for following in followings %}
+    <li>
+        <a href="/profile/{{ following }}">{{ following }}</a>
+    </li>
+    {% endfor %}
+    </ul>
+    <a href="/profile">Back to Profile</a>
+</div>
+</body>
+</html>

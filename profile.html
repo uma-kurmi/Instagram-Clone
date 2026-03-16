@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Profile</title>
+    <link type="text/css" href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet"/>
+    <script type="module" src="{{ url_for('static', path='/firebase-login.js') }}"></script>
+    <style>
+        .post {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .post img {
+            max-width: 100%;
+            height: auto;
+        }
+        .post-actions {
+            margin-top: 10px;
+        }
+        .post-actions a {
+            color: #666;
+            text-decoration: none;
+        }
+        .post-actions a:hover {
+            text-decoration: underline;
+        }
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+        .comment-form {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            min-height: 60px;
+            margin-bottom: 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .show-more-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .show-more-btn:hover {
+            background: #0056b3;
+        }
+        .comments-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ user_data.username }}</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <a href="/followers">{{ followers_count }} Followers</a> |
+                <a href="/following">{{ following_count }} Following</a>
+            </div>
+            <div>
+                <a href="/">Back to Timeline</a>
+            </div>
+        </div>
+        
+        {% if user_data.username != current_user.username %}
+            {% if is_following %}
+                <form action="/unfollow/{{ user_data.username }}" method="post">
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% else %}
+                <form action="/follow/{{ user_data.username }}" method="post">
+                    <button type="submit">Follow</button>
+                </form>
+            {% endif %}
+        {% endif %}
+        <hr/>
+        {% for post in posts %}
+            <div class="post">
+                <img src="{{ post.ImageURL }}" alt="User post image">
+                <p>{{ post.Caption }}</p>
+                <p>Posted on: {{ post.Date.strftime('%b %d, %Y %I:%M %p') }}</p>
+                
+                <div class="comments-section">
+                    <h4>Comments:</h4>
+                    {% for comment in post.get('comments', []) %}
+                        <div class="comment">
+                            <strong>{{ comment['Username'] }}</strong>: {{ comment['Comment'] }}
+                            <small>({{ comment['Date'].strftime('%b %d, %Y %I:%M %p') }})</small>
+                        </div>
+                    {% endfor %}
+
+                    {% if post.get('has_more_comments', False) %}
+                        <form method="get" action="/post/{{ post.id }}">
+                            <input type="hidden" name="show_all" value="true">
+                            <button type="submit" class="show-more-btn">Show all comments</button>
+                        </form>
+                    {% endif %}
+
+                    <div class="comment-form">
+                        <form action="/comment/{{ post.id }}" method="post">
+                            <textarea name="comment_text" maxlength="200" placeholder="Write a comment (max 200 chars)..." required></textarea>
+                            <div style="text-align: right;">
+                                <span class="char-count">0/200</span>
+                                <button type="submit">Add Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        {% endfor %}
+    </div>
+
+    <script>
+        
+        document.querySelectorAll('textarea[name="comment_text"]').forEach(textarea => {
+            const charCount = textarea.parentElement.querySelector('.char-count');
+            textarea.addEventListener('input', function() {
+                const remaining = this.value.length;
+                charCount.textContent = `${remaining}/200`;
+            });
+        });
+    </script>
+</body>
+</html>

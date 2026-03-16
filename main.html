@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Firestore basics</title>
+    <link type="text/css" href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet"/>
+    <script type="module" src="{{ url_for('static', path='/firebase-login.js') }}"></script>
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        #sign-out {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: absolute;
+            right: 40px;
+            top: 40px;
+        }
+        #sign-out:hover {
+            background-color: #c82333;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .login-container input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+        .comment-form {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            min-height: 60px;
+            margin-bottom: 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .show-more-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
+        }
+        .show-more-btn:hover {
+            background: #0056b3;
+        }
+        .comments-section {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="login-box" {% if user_token %}hidden="true"{% endif %}>
+        <div class="login-container">
+            <h2>Login to Instagram Clone</h2>
+            <input type="email" id="email" placeholder="Email"><br/>
+            <input type="password" id="password" placeholder="Password"><br/>
+            <button id="login">Login</button>
+            <button id="sign-up">Sign up</button>
+        </div>
+    </div>
+    <button id="sign-out" {% if not user_token %}hidden="true"{% endif %}>Sign out</button>
+
+    {% if user_token %}
+        <div class="header">
+            <h1>Instagram Clone</h1>
+        </div>
+        <div class="container">
+            <a href="/profile">My Profile</a> |
+            <a href="/search">Search</a> |
+            <a href="/add_post">Add Post</a>
+           
+            {% for post in timeline %}
+            <div class="post">
+                <img src="{{ post['ImageURL'] }}" width="300px">
+                <p>{{ post['Caption'] }}</p>
+                <p>Posted by: {{ post['Username'] }}</p>
+                <p>Date: {{ post['Date'] }}</p>
+                
+                <div class="comments-section">
+                    <h4>Comments:</h4>
+                    {% for comment in post.get('comments', []) %}
+                        <div class="comment">
+                            <strong>{{ comment['Username'] }}</strong>: {{ comment['Comment'] }}
+                            <small>({{ comment['Date'].strftime('%b %d, %Y %I:%M %p') }})</small>
+                        </div>
+                    {% endfor %}
+
+                    {% if post.get('has_more_comments', False) %}
+                        <form method="get" action="/post/{{ post['id'] }}">
+                            <input type="hidden" name="show_all" value="true">
+                            <button type="submit" class="show-more-btn">Show all comments</button>
+                        </form>
+                    {% endif %}
+
+                    <div class="comment-form">
+                        <form action="/comment/{{ post['id'] }}" method="post">
+                            <textarea name="comment_text" maxlength="200" placeholder="Write a comment (max 200 chars)..." required></textarea>
+                            <div style="text-align: right;">
+                                <span class="char-count">0/200</span>
+                                <button type="submit">Add Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+<script>
+    
+    document.querySelectorAll('textarea[name="comment_text"]').forEach(textarea => {
+        const charCount = textarea.parentElement.querySelector('.char-count');
+        textarea.addEventListener('input', function() {
+            const remaining = this.value.length;
+            charCount.textContent = `${remaining}/200`;
+        });
+    });
+</script>
+</body>
+</html>
