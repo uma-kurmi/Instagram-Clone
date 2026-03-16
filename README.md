@@ -42,7 +42,7 @@ Google Cloud Storage
 # Project Structure
 Instagram-Clone
 
-├── main.py
+main.py
 
 ├── local_constants.py
 
